@@ -1,8 +1,8 @@
 import { getRandomNumber } from './util.js';
 
-const AVATAR = 6;
+const avatarCount = 6;
 
-const avatarURL = (number) => `img/avatar-${number}.svg`;
+const getPathForAvatarImg = (number) => `img/avatar-${number}.svg`;
 
 const NAMES = [
   'Иван',
@@ -31,20 +31,20 @@ const SENTENCES = [
   'Замечательно!',
 ];
 
-// Функция для генерации случайного комментария
 function generateRandomComment() {
-  const randomAvatarIndex = getRandomNumber(1, AVATAR);
+  const randomAvatarIndex = getRandomNumber(1, avatarCount);
   const randomNameIndex = getRandomNumber(0, NAMES.length - 1);
   const randomSentenceIndex = getRandomNumber(0, SENTENCES.length - 1);
 
   return {
     id: getRandomNumber(1, 1000),
-    avatar: avatarURL(randomAvatarIndex),
+    avatar: getPathForAvatarImg(randomAvatarIndex),
     message: SENTENCES[randomSentenceIndex],
     name: NAMES[randomNameIndex],
   };
 }
 
+// Функция для генерации массива комментариев
 export function generateCommentsArray() {
   const commentsArray = [];
   const usedIds = new Set();
@@ -53,10 +53,10 @@ export function generateCommentsArray() {
     const commentsCount = getRandomNumber(0, 30);
     const comments = [];
 
-    // Генерация случайных комментариев
+
     for (let j = 0; j < commentsCount; j++) {
       const comment = generateRandomComment();
-      // Проверка на уникальность id комментария
+
       while (usedIds.has(comment.id)) {
         comment.id = getRandomNumber(1, 1000);
       }
@@ -68,4 +68,36 @@ export function generateCommentsArray() {
   }
 
   return commentsArray;
+}
+
+// Функция для генерации массива фотографий
+export function generatePhotosArray() {
+  const photosArray = [];
+  const usedIds = new Set();
+
+  for (let i = 1; i <= 25; i++) {
+    const photo = {
+      id: getRandomNumber(1, 1000),
+      url: `photos/${i}.jpg`,
+      description: SENTENCES[getRandomNumber(0, SENTENCES.length - 1)],
+      likes: getRandomNumber(15, 200),
+      comments: [],
+    };
+
+    const commentsCount = getRandomNumber(1, 5);
+
+    for (let j = 0; j < commentsCount; j++) {
+      const comment = generateRandomComment();
+      // Проверка на уникальность id комментария
+      while (usedIds.has(comment.id)) {
+        comment.id = getRandomNumber(1, 1000);
+      }
+      usedIds.add(comment.id);
+      photo.comments.push(comment);
+    }
+
+    photosArray.push(photo);
+  }
+
+  return photosArray;
 }
