@@ -1,6 +1,7 @@
 
-import { generateCommentsArray } from './data.js';
+import { renderPhoto } from './photo.js';
+import { generatePhotosArray } from './data.js';
 
-const commentsArray = generateCommentsArray();
+const photosArray = generatePhotosArray();
 
-console.log(commentsArray);
+renderPhoto(photosArray);
